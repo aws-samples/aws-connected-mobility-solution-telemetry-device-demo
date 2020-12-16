@@ -61,6 +61,7 @@ cd /greengrass/ggc/core
 ```bash
 pip3 install AWSIoTPythonSDK
 pip3 install boto3
+pip3 install dict_recursive_update
 ```
 
 
@@ -123,9 +124,10 @@ export ENDPOINT=$(aws iot describe-endpoint --endpoint-type iot:data-ats --query
 ```
 Set env vars for credentials
 ```bash
-export CERT=*.cert.pem
-export KEY=*.private.key
+export CERT=$(ls *-certificate.pem.crt)
+export KEY=$(ls *-private.pem.key)
 ```
+
 _Or modify as needed if you have multiple credentials. Set these vars to the specific credentials expanded from the `.tar.gz` file downloaded as part of the thing creation_
 
 
@@ -164,7 +166,6 @@ You can customize this sample update message as needed and publish to `$aws/thin
 | time_scale | scale factor to convert values of the `time_col_name` column to seconds--e.g. 1000.0 for mS, 1.0 for S |
 
 
-
 ## Data preparation
 
 The included Notebook, `Build Dataset.ipynb` can be used or modified to create a collection of CSV files with telemetry data from a public data source. In general, a CSV file should
@@ -176,3 +177,7 @@ The included Notebook, `Build Dataset.ipynb` can be used or modified to create a
 The file will be read line-by-line, constructing payload messages for all the other columns with non-blank headers and publishing these messages on the topic `vt/<VehId>`.  When the end of the file is reached, the telemetry device will start again at the top. If it is desired to avoid a discontinuous jump in data, CSV files could be prepared to 'mirror' the data rows by duplicating a reverse ordered series of rows.  This would have the effect of 'back tracking' the trace, but would avoid discontinuous jumps.
 
 Understanding this, it should be straightforward to construct a wide range of telemetry simulations. However, it is recommended that new CSV files be built from real world captures such as the VED data source so as to make GPS coordinates, speeds, etc. realistic.
+
+## Checkout the Samples
+
+In the Samples directory are some other applications to use this device software to send data. Follow the Simulation guide to build a small randomized sender of data that is easily piped to the telemetry device for wide range of uses.

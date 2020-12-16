@@ -21,6 +21,10 @@
 #
 
 from abc import ABC, abstractmethod
+import ast
+from dict_recursive_update import recursive_update
+import json
+
 
 class MessagePayload(ABC):
     # pass array of keys to remove from message BEFORE or AFTER formatting
@@ -31,9 +35,13 @@ class MessagePayload(ABC):
     #
     def __init__(self, d, config={'preDropKeys':[], 'postDropKeys':[]}) -> None:
         self.payload = {}
-        self.preDropKeys = config.get('preDropKeys', [])
-        self.preDropKeys.append('')
-        self.postDropKeys = config.get('postDropKeys', [])
+        self.preDropKeys = config.get('preDropKeys')
+        if self.preDropKeys is None:
+            self.preDropKeys = []
+        self.preDropKeys.append('') 
+        self.postDropKeys = config.get('postDropKeys')
+        if self.postDropKeys is None:
+            self.postDropKeys = []
         self._prepare_message(d)
 
     def _prepare_message(self, d):
@@ -56,6 +64,29 @@ class SimpleLabelledPayload(MessagePayload):
     def make_message(self, d):
         # self.payload = d.copy()
         pass
+    
+# DotLabelledPayload Strategy will expand any property labels with dots .. e.g. "a.b" 
+#   into a: { b }
+class DotLabelledPayload(MessagePayload):
+    def dot_expand(self, k, v):
+        try:
+            v = ast.literal_eval(v)
+        except Exception as e:
+            pass
+        if len(k) == 0:
+            return v
+        
+        keys = k.split('.')
+        key = keys.pop(0)
+        
+        if len(keys) == 0:
+            return { key: v }
+        
+        return { key: self.dot_expand(".".join(keys), v) }        
+    
+    def make_message(self, d):
+        self.payload = {}
+        [ recursive_update(self.payload, self.dot_expand(key, d[key])) for key in d ]
 
 # DynamicLabelledPayload takes apart the dict and builds the payload
 #   the dict is of the format 'name': metric, 'value': reading

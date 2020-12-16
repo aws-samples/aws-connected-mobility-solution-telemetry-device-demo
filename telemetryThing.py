@@ -99,7 +99,7 @@ def getTopicGenerator():
 def makePayload(telemetry):
     payload_strategy = getattr(MessagePayload, state.get('payload_strategy', 'SimpleLabelledPayload'))
     return payload_strategy(telemetry, {
-        'preDropKeys':state.get('ignore_columns'),
+        'preDropKeys':state.get('ignore_columns',[]),
         'metricKey': state.get('measure_column'),
         'readingKey': state.get('value_column'),
         'time_col_name': state.get('time_col_name')
@@ -177,7 +177,7 @@ def run():
     last_time = do_something()
     sleep_time = 0.05 if rate == None else 1.0/rate
     while True:
-        time.sleep(sleep_time)
+        time.sleep(sleep_time if sleep_time > 0 else timeout)
 
         cur_time = do_something()
 

@@ -1,4 +1,4 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+    # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -87,7 +87,7 @@ class FileReader():
 
             # check local cache before downloading
             localFile = self._getLocalFilePath(key)
-            if Path(localFile).is_file():
+            if Path(localFile).exists():
                 self._setLocalFile(localFile)
             else:
                 handlers[protocol](bucket, key)

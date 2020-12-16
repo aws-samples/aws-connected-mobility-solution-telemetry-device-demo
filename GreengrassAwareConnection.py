@@ -41,17 +41,18 @@ class Obj(object):
     pass
 
 class GreengrassAwareConnection:
-    MAX_DISCOVERY_RETRIES = 10
-    GROUP_CA_PATH = "./groupCA/"
-    OFFLINE_QUEUE_DEPTH = 100
-
-    def __init__(self, host, rootCA, cert, key, thingName, stateChangeQueue = None):
+    def __init__(self, host, rootCA, cert, key, thingName, stateChangeQueue = None, config={}):
         self.logger = logging.getLogger("GreengrassAwareConnection")
         self.logger.setLevel(logging.DEBUG)
         streamHandler = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         streamHandler.setFormatter(formatter)
         self.logger.addHandler(streamHandler)
+        
+        self.config = config
+        self.max_discovery_retries = self.config.get('MAX_DISCOVERY_RETRIES', 10)
+        self.group_ca_path = self.config.get('GROUP_CA_PATH', "./groupCA/")
+        self.offline_queue_depth = self.config.get('OFFLINE_QUEUE_DEPTH', 10)
 
         self.host = host
         self.rootCA = rootCA
@@ -88,7 +89,7 @@ class GreengrassAwareConnection:
         discoveryInfoProvider.configureCredentials(self.rootCA, self.cert, self.key)
         discoveryInfoProvider.configureTimeout(10)  # 10 sec
 
-        retryCount = self.MAX_DISCOVERY_RETRIES
+        retryCount = self.max_discovery_retries
         self.groupCA = None
         coreInfo = None
 
@@ -103,9 +104,9 @@ class GreengrassAwareConnection:
                 self.coreInfo = coreList[0]
                 self.logger.info("Discovered GGC: %s from Group: %s" % (self.coreInfo.coreThingArn, groupId))
 
-                self.groupCA = self.GROUP_CA_PATH + groupId + "_CA_" + str(uuid.uuid4()) + ".crt"
-                if not os.path.exists(self.GROUP_CA_PATH):
-                    os.makedirs(self.GROUP_CA_PATH)
+                self.groupCA = self.group_ca_path + groupId + "_CA_" + str(uuid.uuid4()) + ".crt"
+                if not os.path.exists(self.group_ca_path):
+                    os.makedirs(self.group_ca_path)
                 groupCAFile = open(self.groupCA, "w")
                 groupCAFile.write(ca)
                 groupCAFile.close()
@@ -163,7 +164,7 @@ class GreengrassAwareConnection:
             self.client.configureEndpoint(currentHost, currentPort)
             try:
                 self.client.configureAutoReconnectBackoffTime(1, 128, 20)
-                self.client.configureOfflinePublishQueueing(1000)
+                self.client.configureOfflinePublishQueueing(10)
                 self.client.configureDrainingFrequency(50)
                 self.client.configureMQTTOperationTimeout(10)
 
@@ -259,7 +260,7 @@ class GreengrassAwareConnection:
         self.shadowClient.configureConnectDisconnectTimeout(10)  # 10 sec
         self.shadowClient.configureMQTTOperationTimeout(5)  # 5 sec
 
-        self.shadowClient._AWSIoTMQTTClient.configureOfflinePublishQueueing(self.OFFLINE_QUEUE_DEPTH, DROP_OLDEST)
+        self.shadowClient._AWSIoTMQTTClient.configureOfflinePublishQueueing(self.offline_queue_depth, DROP_OLDEST)
 
         self.shadowClient.connect()
 
