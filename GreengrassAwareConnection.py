@@ -50,9 +50,9 @@ class GreengrassAwareConnection:
         self.logger.addHandler(streamHandler)
         
         self.config = config
-        self.max_discovery_retries = self.config.get('MAX_DISCOVERY_RETRIES', 10)
+        self.max_discovery_retries = self.config.get('MAX_DISCOVERY_RETRIES', 3)
         self.group_ca_path = self.config.get('GROUP_CA_PATH', "./groupCA/")
-        self.offline_queue_depth = self.config.get('OFFLINE_QUEUE_DEPTH', 10)
+        self.offline_queue_depth = self.config.get('OFFLINE_QUEUE_DEPTH', 100)
 
         self.host = host
         self.rootCA = rootCA
@@ -133,7 +133,7 @@ class GreengrassAwareConnection:
                 print("Type: %s" % str(type(e)))
                 # print("Error message: %s" % e.message)
                 retryCount -= 1
-                print("\n%d/%d retries left\n" % (retryCount, self.MAX_DISCOVERY_RETRIES))
+                print("\n%d/%d retries left\n" % (retryCount, self.max_discovery_retries))
                 print("Backing off...\n")
                 self.backOffCore.backOff()
 
@@ -145,10 +145,12 @@ class GreengrassAwareConnection:
         return self.groupCA if self.hasDiscovered() else self.rootCA
 
     def onOnline(self):
-        print("online callback")
+        # print("online callback")
+        pass
 
     def onOffline(self):
-        print("offline callback")
+        # print("offline callback")
+        pass
 
     def connect(self):
         if self.isConnected():
@@ -164,7 +166,7 @@ class GreengrassAwareConnection:
             self.client.configureEndpoint(currentHost, currentPort)
             try:
                 self.client.configureAutoReconnectBackoffTime(1, 128, 20)
-                self.client.configureOfflinePublishQueueing(10)
+                self.client.configureOfflinePublishQueueing(self.offline_queue_depth)
                 self.client.configureDrainingFrequency(50)
                 self.client.configureMQTTOperationTimeout(10)
 
@@ -191,7 +193,7 @@ class GreengrassAwareConnection:
         self.connected = False
 
     def pubAck(self, mid):
-        print(f"puback: {mid}")
+        # print(f"puback: {mid}")
         self.published_ids.remove(mid)
 
     def publicationIsBlocked(self):
@@ -212,7 +214,8 @@ class GreengrassAwareConnection:
             self.published_ids.append(int(result))
 
         except ValueError as e:
-            print(f"message queued - {result}")
+            # print(f"message queued - {result}")
+            pass
         except publishError as e:
             print(f"Publish Error: {e.message}")
         except publishQueueFullException as e:

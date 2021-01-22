@@ -82,7 +82,7 @@ class DeltaProcessor(Observer):
 
 try:
     deltas = ObservableDeepArray()
-    iotConnection = GreengrassAwareConnection(host, rootCA, cert, key, thingName, deltas)
+    iotConnection = GreengrassAwareConnection(host, rootCA, cert, key, thingName, deltas, state)
 
     time.sleep(10)
 
@@ -160,9 +160,12 @@ def do_something():
         if timeout > 300:
             logger.warn("timeout escalated to 30 sec -- re-connecting")
 
-            iotConnection.disconnect()
-            time.sleep(10)
-            iotConnection.connect()
+            try:
+                iotConnection.disconnect()
+                time.sleep(10)
+                iotConnection.connect()
+            except Exception as e:
+                pass
 
             sleep = [0, 1]
         time.sleep(timeout/10.0)
