@@ -20,7 +20,7 @@ cryptography==3.3.2
 decorator==4.4.2
 dict-recursive-update==1.0.1
 distro-info===0.18ubuntu0.18.04.1
-Django==2.0.2
+Django==2.2.13
 docutils==0.15.2
 git-remote-codecommit==1.15.1
 hibagent==1.0.1
