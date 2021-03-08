@@ -84,7 +84,7 @@ ssh-import-id==5.7
 stevedore==3.3.0
 systemd-python==234
 traitlets==4.3.3
-Twisted==17.9.0
+Twisted==20.3.0
 typed-ast==1.2.0
 typing-extensions==3.7.4.3
 ufw==0.36
