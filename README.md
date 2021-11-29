@@ -114,7 +114,7 @@ From the 'CMS-Demo-Cloud-Group' in the Greengrass section of the IoT Console:
 In the IoT Console, Click on **Settings** and find the **Custom endpoint** near the top of the page, copy this value into an environment variable for the device/shell where you will execute the telemetry thing
 
 ```bash
-export $ENDPOINT={xxx}.-ats.iot.{region}.amazonaws.com 
+export ENDPOINT={xxx}.-ats.iot.{region}.amazonaws.com 
 ```
 _be sure to update the above with your specific endpoint_
 
