@@ -10,7 +10,7 @@ This project is designed to be used in conjunction with the [AWS Connected Mobil
 
 Set up greengrass group, core, device, etc.
 
-1. log in to Greengrass console (e.g. https://us-east-1.console.aws.amazon.com/iot/home?region=us-east-1#/greengrass/grouphub, but check region)
+1. log in to Greengrass Classic (V1) console (e.g. https://console.aws.amazon.com/iot/home?region=us-east-1#/greengrass/classicIntro, but check region)
 2. Click **Create Group**, **Use default group**
 3. Use name `CMS-Demo-Cloud-Group`, Click **Next**, **Create group**
 4. Click **Download these resources as tar.gz** -- saves in `Downloads` directory
