@@ -92,6 +92,7 @@ sudo wget https://www.amazontrust.com/repository/AmazonRootCA1.pem -O root.ca.pe
 ## Setup Subscriptions 
 
 From the 'CMS-Demo-Cloud-Group' in the Greengrass section of the IoT Console:
+1. Click on the Device you created above, **Click** on the ellipses and choose **Sync to Cloud**
 1. Click **Subscriptions**, **Add Subscription**
 2. Select **Devices** / **CMS-Demo-Cloud-TCU** for Source 
 3. Select **Services** / **IoT Cloud** for Target, click **Next**
