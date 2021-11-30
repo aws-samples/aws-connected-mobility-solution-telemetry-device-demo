@@ -96,7 +96,7 @@ From the 'CMS-Demo-Cloud-Group' in the Greengrass section of the IoT Console:
 1. Click **Subscriptions**, **Add Subscription**
 2. Select **Devices** / **CMS-Demo-Cloud-TCU** for Source 
 3. Select **Services** / **IoT Cloud** for Target, click **Next**
-4. Enter 'dt/cvra/#' for Topic Filter and click **Next**
+4. Enter 'vt/cvra/#' for Topic Filter and click **Next**
 5. Click **Finish**
 6. Add additional subscriptions for shadow service as in this table
  
