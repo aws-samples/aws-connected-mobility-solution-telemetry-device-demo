@@ -207,3 +207,5 @@ Understanding this, it should be straightforward to construct a wide range of te
 ## Checkout the Samples
 
 In the Samples directory are some other applications to use this device software to send data. Follow the Simulation guide to build a small randomized sender of data that is easily piped to the telemetry device for wide range of uses.
+
+**The `VED-Sample` includes two of the longer routes from the VED dataset referenced in the `Build Dataset.ipynb` Notebook along with a `Config.py` file to use this file with the Connected Mobility Solution.
