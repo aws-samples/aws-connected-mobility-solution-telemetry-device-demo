@@ -109,6 +109,30 @@ From the 'CMS-Demo-Cloud-Group' in the Greengrass section of the IoT Console:
 
 7. Choose **Deploy** from the Actions menu and wait for Deployment to be complete
 
+## Adjust the pre-created policy for the Thing
+
+1. Click on **Secure**, then **Policies**
+2. Click the link for the policy created when you created the Thing, e.g. `CMS-Demo-Cloud-TCU-policy`.
+3. Edit the Policy document to allow the additional calls like updating Shadow, etc. with
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+ }
+ ```
+ 
+ 4. Click **Save as New Version**
 
 ## Start the telemetry device
 
