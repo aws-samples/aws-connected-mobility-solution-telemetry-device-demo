@@ -24,7 +24,7 @@ import datetime
 # these are the defaults, they can be overwritten
 state = {
     # file to read -- 'file://', 's3://' also supported
-    'file': 'file:///988_465.csv',
+    'file': 'file:///VED-Sample/988_465.csv',
 
     #
     # Timestamp handling
