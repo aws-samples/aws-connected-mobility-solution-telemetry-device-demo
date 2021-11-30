@@ -126,8 +126,8 @@ export ENDPOINT=$(aws iot describe-endpoint --endpoint-type iot:data-ats --query
 ```
 Set env vars for credentials
 ```bash
-export CERT=$(ls *-certificate.pem.crt)
-export KEY=$(ls *-private.pem.key)
+export CERT=$(ls *.cert.pem)
+export KEY=$(ls *.private.key)
 ```
 
 _Or modify as needed if you have multiple credentials. Set these vars to the specific credentials expanded from the `.tar.gz` file downloaded as part of the thing creation_
