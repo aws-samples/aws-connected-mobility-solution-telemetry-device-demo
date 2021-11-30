@@ -119,7 +119,8 @@ export ENDPOINT={xxx}.-ats.iot.{region}.amazonaws.com
 ```
 _be sure to update the above with your specific endpoint_
 
-Or use the command line client (if installed and with appropriate credentials)
+Or use the command line client (if installed and with appropriate credentials). **You must have previously configured the AWS Command Line Client.  If at an AWS Event, you can export the variables provided for your credentials.**
+
 ```bash
 export ENDPOINT=$(aws iot describe-endpoint --endpoint-type iot:data-ats --query 'endpointAddress' --output text)
 ```
